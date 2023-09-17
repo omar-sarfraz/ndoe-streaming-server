@@ -37,6 +37,17 @@ app.get("/videoplayer", (req, res) => {
 
 app.listen(port, () => {
   console.log(`Example app listen at http://localhost:${port}`);
+
+  const file = fs.createWriteStream("./tmp/video.mp4");
+  const request = http.get("https://res.cloudinary.com/dtv9lwjso/video/upload/v1694956219/video_w5ta68.mp4", function (response) {
+    response.pipe(file);
+
+    // after download completed close filestream
+    file.on("finish", () => {
+      file.close();
+      console.log("Download Completed");
+    });
+  });
 });
 
 module.exports = app;
