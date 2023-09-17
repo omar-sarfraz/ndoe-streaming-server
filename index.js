@@ -16,7 +16,7 @@ app.get("/", (req, res) => {
 
 app.get("/videoplayer", (req, res) => {
   const range = req.headers.range;
-  const videoPath = "./tmp/video.mp4";
+  const videoPath = "/tmp/video.mp4";
   const videoSize = fs.statSync(videoPath).size;
   const chunkSize = 1 * 1e6;
   const start = Number(range.replace(/\D/g, ""));
@@ -39,7 +39,7 @@ app.get("/videoplayer", (req, res) => {
 app.listen(port, () => {
   console.log(`Example app listen at http://localhost:${port}`);
 
-  const file = fs.createWriteStream("./tmp/video.mp4");
+  const file = fs.createWriteStream("/tmp/video.mp4");
   const request = http
     .get("https://res.cloudinary.com/dtv9lwjso/video/upload/v1694956219/video_w5ta68.mp4", function (response) {
       response.pipe(file);
