@@ -15,7 +15,7 @@ app.get("/", (req, res) => {
 
 app.get("/videoplayer", (req, res) => {
   const range = req.headers.range;
-  const videoPath = "./video.mp4";
+  const videoPath = "./tmp/video.mp4";
   const videoSize = fs.statSync(videoPath).size;
   const chunkSize = 1 * 1e6;
   const start = Number(range.replace(/\D/g, ""));
