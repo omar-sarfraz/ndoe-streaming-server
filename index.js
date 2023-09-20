@@ -18,6 +18,7 @@ app.get("/", (req, res) => {
 
 app.get("/videoplayer", (req, res) => {
   const range = req.headers.range;
+  console.log("Range header: ", range);
   const tmpDirectory = path.join(process.cwd(), "tmp");
   console.log(tmpDirectory);
   const videoPath = tmpDirectory + "/video.mp4";
