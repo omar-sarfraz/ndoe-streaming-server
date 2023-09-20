@@ -1,11 +1,16 @@
 const express = require("express");
 const fs = require("fs");
 let cors = require("cors");
-const http = require("https");
+const https = require("https");
 const path = require("path");
 const request = require("request");
 
+const http = require("http");
+const socketIo = require("socket.io");
+
 const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
 
 const port = 3000;
 
@@ -41,6 +46,20 @@ app.get("/videoplayer", (req, res) => {
   stream.pipe(res);
 });
 
+io.on("connection", (socket) => {
+  console.log("A client connected");
+
+  socket.on("test_data", (data) => {
+    console.log("Received client event:", data);
+    // Send a response back to the client
+    socket.emit("test_server_response", { message: "Hello from the server!" });
+  });
+
+  socket.on("disconnect", () => {
+    console.log("A client disconnected");
+  });
+});
+
 app.get("/test", async (req, res) => {
   const tmpDirectory = path.join(process.cwd(), "tmp");
   console.log(tmpDirectory);
@@ -48,14 +67,14 @@ app.get("/test", async (req, res) => {
   res.sendFile(`${tmpDirectory}/Reaper.jpg`);
 });
 
-app.listen(port, () => {
+server.listen(port, () => {
   console.log(`Example app listen at http://localhost:${port}`);
 
   const tmpDirectory = path.join(process.cwd(), "tmp");
   console.log(tmpDirectory);
 
   const file = fs.createWriteStream(tmpDirectory + "/video.mp4");
-  const request = http
+  const request = https
     .get("https://res.cloudinary.com/dtv9lwjso/video/upload/v1694956219/video_w5ta68.mp4", function (response) {
       response.pipe(file);
 
