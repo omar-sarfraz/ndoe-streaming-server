@@ -12,7 +12,7 @@ const app = express();
 const server = http.createServer(app);
 const io = socketIo(server);
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 app.use(cors());
 app.use(express());
@@ -63,6 +63,7 @@ io.on("connection", (socket) => {
 app.get("/test", async (req, res) => {
   const tmpDirectory = path.join(process.cwd(), "tmp");
   console.log(tmpDirectory);
+  console.log("PORT is", process.env.PORT);
 
   res.sendFile(`${tmpDirectory}/Reaper.jpg`);
 });
